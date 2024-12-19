@@ -5,6 +5,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  type LoaderFunction,
+  type MetaFunction,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -22,6 +24,24 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
   { rel: "stylesheet", href: stylesheet },
+];
+
+/**
+ * Just by adding the loader args, it causes the `meta` function's `data` to throw a TS error
+ */
+export const loader = async () => ({
+  orgSlug: "test-org",
+});
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => [
+  {
+    title: "Some default title",
+  },
+  {
+    href: `http://google.com/some-fake-url/${data?.orgSlug}`,
+    rel: "stylesheet",
+    tagName: "link",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
